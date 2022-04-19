@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Текстовый редактор</title>
+	<link rel="stylesheet" href="../css/style.css">
+	<script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript">
+      eel.expose(say_hello_js); // Expose this function to Python
+      function say_hello_js(x) {
+        console.log("Hello from " + x);
+      }
+
+      say_hello_js("Javascript World!");
+      eel.say_hello_py("Javascript World!"); // Call a Python function
+    </script>
+</head>
+<body>
+<div id="container">
+	<form id="file-form" method="post">
+		<input type="file" id="file-load">
+		<!--<textarea name="text" id="file-text"></textarea>-->
+		<input type="submit" value="Загрузить">
+	</form>
+</div>
+</body>
+</html>
