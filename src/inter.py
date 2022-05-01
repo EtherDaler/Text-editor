@@ -1,7 +1,8 @@
+import os
 import tkinter as tk
+
 from tkinter import *
 from .file_worker import *
-import os
 from PIL import ImageTk, Image
 from idlelib.tooltip import Hovertip
 
@@ -22,6 +23,27 @@ class Interface:
         )
         self.window1 = None
         self.window2 = None
+
+    def keypress(self, e: object):
+        if e.keycode == 86 and e.keysym != 'v':
+            text = self.text.selection_get(selection='CLIPBOARD')
+            self.text.insert('insert', text)
+        elif e.keycode == 67 and e.keysym != 'c':
+            self.text.clipboard_clear()
+            text = self.text.get("sel.first", "sel.last")
+            self.text.clipboard_append(text)
+        elif e.keycode == 88 and e.keysym != 'x':
+            self.text.clipboard_clear()
+            text = self.text.get("sel.first", "sel.last")
+            self.text.clipboard_append(text)
+            self.text.delete("sel.first", "sel.last")
+        elif e.keycode == 83 and e.keysym != 's':
+            self.save_file()
+        elif e.keycode == 70 and e.keysym != 'f':
+            self.find()
+        elif e.keycode == 82 and e.keysym != 'r':
+            self.change()
+
 
     def menu(self):
         self.menuBar = tk.Menu(self.root)
@@ -96,6 +118,8 @@ class Interface:
         self.root.quit()
 
     def start_parse(self):
+        self.text.tag_add('all', 1.0, tk.END)
+        self.text.tag_config('all', foreground="black")
         what = self.window.entry_find.get()
         s = self.text.get(1.0, tk.END+"-1c")
         lines = s.split("\n")
@@ -159,6 +183,7 @@ class Interface:
         self.text.bind('<Control-s>', self.save_file)
         self.root.bind('<Control-q>', self.on_closing)
         self.text.bind('<Control-f>', self.find)
-        self.text.bind('<Control-x>', self.change)
+        self.text.bind('<Control-r>', self.change)
+        self.text.bind("<Control-KeyPress>", self.keypress)
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
