@@ -3,9 +3,7 @@ import tkinter as tk
 
 from PIL import ImageTk, Image
 from idlelib.tooltip import Hovertip
-
-from tkinter import *
-from .file_worker import *
+from .file_worker import get_os_slash, change_name
 
 class Interface:
     def __init__(self, min_width: int, min_height: int):
@@ -43,6 +41,8 @@ class Interface:
             self.find()
         elif e.keycode == 82 and e.keysym != 'r':
             self.change()
+        elif e.keycode == 81 and e.keysym != 'q':
+            self.on_closing()
 
 
     def menu(self):
@@ -62,11 +62,11 @@ class Interface:
 
 
     def scroll_text(self):
-        self.scroll_y = Scrollbar(self.root, orient=VERTICAL, command=self.text.yview)
+        self.scroll_y = tk.Scrollbar(self.root, orient=tk.VERTICAL, command=self.text.yview)
         self.scroll_y.pack(side="right", fill="y")
         self.text.configure(yscrollcommand=self.scroll_y.set)
 
-        self.scroll_x = Scrollbar(self.root, orient=HORIZONTAL, command=self.text.xview)
+        self.scroll_x = tk.Scrollbar(self.root, orient=tk.HORIZONTAL, command=self.text.xview)
         self.scroll_x.pack(side="bottom", fill="x")
         self.text.configure(xscrollcommand=self.scroll_x.set)
 
@@ -126,18 +126,18 @@ class Interface:
         if s.find(what) == -1:
             tk.messagebox.showerror(title="Error", message="404, Nothing was found!")
         for line in lines:
-            i = 0 # Счетчик, который позволяет искать вхождение подстроки, начиная с определенного индекса
-            while line.find(what, i) != -1:
-                tag = "f" + str(lines.index(line)) + str(line.find(what, i))
+            find_start = 0 # Счетчик, который позволяет искать вхождение подстроки, начиная с определенного индекса
+            while line.find(what, find_start) != -1:
+                tag = "f" + str(lines.index(line)) + str(line.find(what, find_start))
                 self.text.tag_add(
                     tag,
                     # тут то, что стоит до '.' указывает tkinter на номер строки, а то, что стоит после '.'
                     # указывает на индекс подстроки в строке про это можно почитать в документации tkinter
-                    float(str(lines.index(line) + 1)+ '.' + str(line.find(what, i))),
-                    float(str(lines.index(line) + 1) + '.' + str(line.find(what, i) + len(what)))
+                    float(str(lines.index(line) + 1)+ '.' + str(line.find(what, find_start))),
+                    float(str(lines.index(line) + 1) + '.' + str(line.find(what, find_start) + len(what)))
                 )
                 self.text.tag_config(tag, foreground="blue")
-                i = line.find(what, i) + len(what)
+                find_start = line.find(what, find_start) + len(what)
 
     def window_close(self):
         self.text.tag_add('all', 1.0, tk.END)

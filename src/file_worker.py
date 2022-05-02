@@ -20,11 +20,11 @@ def get_os_slash():
 def change_name(name):
 	cwd = os.getcwd()
 	slash = get_os_slash()
-	i = 1
+	file_name_num = 1
 	file = cwd + slash + name + '.txt'
 	file = cwd + slash + name + '.txt'
 	while os.path.exists(file) is True:
 		file = cwd + slash + name + '.txt'
-		name = name + str(i)
-		i += 1
+		name = name + str(file_name_num)
+		file_name_num += 1
 	return name + '.txt'
