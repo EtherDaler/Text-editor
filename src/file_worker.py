@@ -8,12 +8,15 @@ import sys
 
 
 def get_os_slash():
+	# Слеши в названии пути к файлу в разных oc отличаются, эта функция нужна для исправления ошибки на разных oc
 	if sys.platform == 'win32' or sys.platform == 'win64':
+		# Слэш в виндовс
 		return"\\"
 	else:
+		# Слэш в unix подобных oc
 		return "/"
 
-
+# эта функция добавляет чиселку в конец к названию файла, если файл с указанным названием уже содержится в директории
 def change_name(name):
 	cwd = os.getcwd()
 	slash = get_os_slash()

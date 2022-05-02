@@ -1,11 +1,11 @@
 import os
 import tkinter as tk
 
-from tkinter import *
-from .file_worker import *
 from PIL import ImageTk, Image
 from idlelib.tooltip import Hovertip
 
+from tkinter import *
+from .file_worker import *
 
 class Interface:
     def __init__(self, min_width: int, min_height: int):
@@ -126,11 +126,13 @@ class Interface:
         if s.find(what) == -1:
             tk.messagebox.showerror(title="Error", message="404, Nothing was found!")
         for line in lines:
-            i = 0
+            i = 0 # Счетчик, который позволяет искать вхождение подстроки, начиная с определенного индекса
             while line.find(what, i) != -1:
                 tag = "f" + str(lines.index(line)) + str(line.find(what, i))
                 self.text.tag_add(
                     tag,
+                    # тут то, что стоит до '.' указывает tkinter на номер строки, а то, что стоит после '.'
+                    # указывает на индекс подстроки в строке про это можно почитать в документации tkinter
                     float(str(lines.index(line) + 1)+ '.' + str(line.find(what, i))),
                     float(str(lines.index(line) + 1) + '.' + str(line.find(what, i) + len(what)))
                 )
