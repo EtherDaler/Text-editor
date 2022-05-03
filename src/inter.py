@@ -23,6 +23,9 @@ class Interface:
         self.window2 = None
 
     def keypress(self, e: object):
+        """
+        Функиця позваоляет отслеживать нажатия горячих клавиш при русской раскладке
+        """
         if e.keycode == 86 and e.keysym != 'v':
             text = self.text.selection_get(selection='CLIPBOARD')
             self.text.insert('insert', text)
@@ -46,6 +49,9 @@ class Interface:
 
 
     def menu(self):
+        """
+        Меню в редакторе
+        """
         self.menuBar = tk.Menu(self.root)
         self.fileMenu = tk.Menu(self.menuBar)
         self.fileMenu.add_command(label="New", command=self.new_file)
@@ -62,6 +68,9 @@ class Interface:
 
 
     def scroll_text(self):
+        """
+        Возможность скроллить текст в редакторе
+        """
         self.scroll_y = tk.Scrollbar(self.root, orient=tk.VERTICAL, command=self.text.yview)
         self.scroll_y.pack(side="right", fill="y")
         self.text.configure(yscrollcommand=self.scroll_y.set)
@@ -71,16 +80,26 @@ class Interface:
         self.text.configure(xscrollcommand=self.scroll_x.set)
 
     def new_file(self):
+        """
+        Создание нового файла
+        """
         self.FILE_NAME = change_name("Untitled")
         self.text.delete('1.0', tk.END)
 
     def save_file(self, *args):
+        """
+        Сохранить файл (по умолчанию расширение txt)
+        Файл сохраняется в корневой папке, если он был только создан
+        """
         data = self.text.get('1.0', tk.END)
         out = open(self.FILE_NAME, 'w')
         out.write(data)
         out.close()
 
     def save_as(self):
+        """
+        Сохранить файл как
+        """
         out = tk.filedialog.asksaveasfile(mode='w', defaultextension='txt', filetypes=self.filetypes)
         data = self.text.get('1.0', tk.END)
         try:
@@ -89,6 +108,9 @@ class Interface:
             tk.messagebox.showerror(title="Error", message="File wasn`t saved!")
 
     def open_file(self):
+        """
+        Открыть существующий файл
+        """
         inp = tk.filedialog.askopenfile(mode="r", filetypes=self.filetypes)
         if inp is None:
             return
@@ -100,9 +122,11 @@ class Interface:
     def info(self):
         tk.messagebox.showinfo("Information", "This Sexy Text Redactor was made by one great programmer called Daler")
 
-    # Функция для проверки закрытия окна
-    # Если в файле были внесены изменения, и он не был сохранен, то выйдет окно с предложением его сохранить
     def on_closing(self, *args):
+        """
+        Функция для проверки закрытия окна.
+        Если в файле были внесены изменения, и он не был сохранен, то выйдет окно с предложением его сохранить
+        """
         if not os.path.exists(self.FILE_NAME):
             if self.text.get(1.0, tk.END+"-1c") != "":
                 if tk.messagebox.askokcancel("Quit", "Do you want to save file?"):
@@ -118,8 +142,13 @@ class Interface:
         self.root.quit()
 
     def start_parse(self):
-        self.text.tag_add('all', 1.0, tk.END)
-        self.text.tag_config('all', foreground="black")
+        """
+        Функция ищет и выделяет строку, которая была введена в форме в окне поиска, название поля из форы: entry_find
+        Для поиска мы бежим по каждой строчке в виджете и с помощью встроенного метода find для строк мы ищем вхождение
+        строки
+        """
+        self.text.tag_add('reset', 1.0, tk.END)
+        self.text.tag_config('reset', foreground="black")
         what = self.window.entry_find.get()
         s = self.text.get(1.0, tk.END+"-1c")
         lines = s.split("\n")
@@ -140,11 +169,18 @@ class Interface:
                 find_start = line.find(what, find_start) + len(what)
 
     def window_close(self):
+        """
+        Закрытие окна поиска
+        Эта функция нужна, чтобы убрать выделение текста при закрытии окна
+        """
         self.text.tag_add('all', 1.0, tk.END)
         self.text.tag_config('all', foreground="black")
         self.window.destroy()
 
     def find(self, *args):
+        """
+        Отрисовка окна поиска и формы поиска строки
+        """
         self.window = tk.Toplevel()
         self.window.geometry('200x150')
         setattr(self.window, 'button', tk.Button(self.window, text="Find", command=self.start_parse))
@@ -154,9 +190,15 @@ class Interface:
         self.window.protocol("WM_DELETE_WINDOW", self.window_close)
 
     def window2_close(self):
+        """
+        Закрытие окна замены
+        """
         self.window2.destroy()
 
     def start_replace(self):
+        """
+        Функция, которая проводит замену с помощью встроенных методов виждета Text() Tkinter-а
+        """
         fr = self.window2.find.get()
         to = self.window2.change.get()
         new = self.text.get(1.0, tk.END).replace(fr, to)
@@ -164,6 +206,9 @@ class Interface:
         self.text.insert('1.0', new)
 
     def change(self, *args):
+        """
+        Отрисовка окна и формы замены строки
+        """
         self.window2 = tk.Toplevel()
         self.window2.geometry('250x250')
         setattr(self.window2, 'button', tk.Button(self.window2, text="Replace", command=self.start_replace))
@@ -179,6 +224,9 @@ class Interface:
         self.window2.protocol("WM_DELETE_WINDOW", self.window2_close)
 
     def run(self):
+        """
+        Функция запуска редактора
+        """
         self.scroll_text()
         self.text.pack()
         self.menu()
