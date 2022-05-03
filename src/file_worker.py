@@ -1,11 +1,10 @@
-import tkinter
-from tkinter import *
-from tkinter.filedialog import asksaveasfile, askopenfile
-from tkinter.messagebox import showerror
-from tkinter import messagebox
 import os
 import sys
 
+import tkinter
+from tkinter.filedialog import asksaveasfile, askopenfile
+from tkinter.messagebox import showerror
+from tkinter import messagebox
 
 def get_os_slash():
 	"""
