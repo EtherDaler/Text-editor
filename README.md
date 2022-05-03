@@ -3,7 +3,7 @@
 ##### download python from offical web site [python.org](https://www.python.org/)
 #### *First step: download or clone our code from github repository*
 ```console
-git clone https://github.com/EtherDaler/Pussy-Knight.git
+git clone https://github.com/EtherDaler/Text-editor.git
 ```
 #### *Intermediate step: create virtual environment*
 ```console
