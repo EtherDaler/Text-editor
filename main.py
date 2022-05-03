@@ -1,7 +1,7 @@
 import tkinter as tk
-from tkinter import *
-from src.inter import *
+from src.inter import Interface
+import src.settings as st
 
-interface = Interface(500, 500)
+interface = Interface(st.WIDTH, st.HEIGHT)
 interface.run()
 

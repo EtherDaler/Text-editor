@@ -4,6 +4,7 @@ import tkinter as tk
 from PIL import ImageTk, Image
 from idlelib.tooltip import Hovertip
 from .file_worker import get_os_slash, change_name
+from .settings import KEYS
 
 class Interface:
     def __init__(self, min_width: int, min_height: int):
@@ -26,25 +27,25 @@ class Interface:
         """
         Функиця позваоляет отслеживать нажатия горячих клавиш при русской раскладке
         """
-        if e.keycode == 86 and e.keysym != 'v':
+        if e.keycode == KEYS[0][0] and e.keysym != KEYS[0][1]:
             text = self.text.selection_get(selection='CLIPBOARD')
             self.text.insert('insert', text)
-        elif e.keycode == 67 and e.keysym != 'c':
+        elif e.keycode == KEYS[1][0] and e.keysym != KEYS[1][1]:
             self.text.clipboard_clear()
             text = self.text.get("sel.first", "sel.last")
             self.text.clipboard_append(text)
-        elif e.keycode == 88 and e.keysym != 'x':
+        elif e.keycode == KEYS[2][0] and e.keysym != KEYS[2][1]:
             self.text.clipboard_clear()
             text = self.text.get("sel.first", "sel.last")
             self.text.clipboard_append(text)
             self.text.delete("sel.first", "sel.last")
-        elif e.keycode == 83 and e.keysym != 's':
+        elif e.keycode == KEYS[3][0] and e.keysym != KEYS[3][1]:
             self.save_file()
-        elif e.keycode == 70 and e.keysym != 'f':
+        elif e.keycode == KEYS[4][0] and e.keysym != KEYS[4][1]:
             self.find()
-        elif e.keycode == 82 and e.keysym != 'r':
+        elif e.keycode == KEYS[5][0] and e.keysym != KEYS[5][1]:
             self.change()
-        elif e.keycode == 81 and e.keysym != 'q':
+        elif e.keycode == KEYS[6][0] and e.keysym != KEYS[6][1]:
             self.on_closing()
 
 
